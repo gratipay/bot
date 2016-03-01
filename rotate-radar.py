@@ -13,10 +13,13 @@ API_ISSUES = 'https://api.github.com/repos/gratipay/inside.gratipay.com/issues'
 class APIError(Exception):
 
     def __init__(self, code, body):
-        Exception.__init__()
+        Exception.__init__(self)
         self.code = code
         self.reason = body.splitlines() and body.splitlines()[-1] or ''
         self.body = body
+
+    def __str__(self):
+        return repr(self)
 
     def __repr__(self):
         return '<APIError {}: {}>'.format(self.code, self.reason)
@@ -29,11 +32,11 @@ class Radar(object):
         self.session.auth = (username, password)
 
 
-    def hit_api(self, method, path_info='', params=None, data=None):
+    def hit_api(self, method, path_info='', params=None, json=None):
         assert method in ('get', 'post', 'patch'), method
         call = getattr(self.session, method)
-        response = call(API_ISSUES + path_info, params=params, data=data)
-        if response.status_code != 200:
+        response = call(API_ISSUES + path_info, params=params, json=json)
+        if response.status_code not in (200, 201):
             raise APIError(response.status_code, response.text)
         return response
 
@@ -41,13 +44,13 @@ class Radar(object):
     def find_current_tickets(self):
         return self.hit_api('get', params={'labels': 'Radar'}).json()
 
-    def create_ticket(self, title, body):
+    def create_ticket(self, title, body, labels):
         print("creating {}".format(title))
-        return self.hit_api('post', data={'title': title, 'body': body})
+        return self.hit_api('post', json={'title': title, 'body': body, 'labels': 'labels'})
 
     def close_ticket(self, number):
         print("closing {}/{}".format(HTML_ISSUES, number))
-        return self.hit_api('patch', '/{}'.format(number), data={'state': 'closed'})
+        return self.hit_api('patch', '/{}'.format(number), json={'state': 'closed'})
 
 
     def rotate(self, ticket):
@@ -66,8 +69,9 @@ class Radar(object):
         next_title = "{} {}".format(title_base, prev_radar_number + 1)
         next_body = [prev_link, ''] + ticket['body'].splitlines()[2:]
         next_body = '\n'.join(next_body).strip()
+        next_labels = [label['name'] for label in ticket['labels']]
 
-        self.create_ticket(next_title, next_body)
+        self.create_ticket(next_title, next_body, next_labels)
         self.close_ticket(prev_ticket_number)
 
 
