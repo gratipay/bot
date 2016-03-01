@@ -2,12 +2,9 @@
 import re
 import os
 import traceback
+import webbrowser
 
 import requests
-
-
-HTML_ISSUES = 'https://github.com/gratipay/inside.gratipay.com/issues'
-API_ISSUES = 'https://api.github.com/repos/gratipay/inside.gratipay.com/issues'
 
 
 class APIError(Exception):
@@ -27,7 +24,11 @@ class APIError(Exception):
 
 class Radar(object):
 
-    def __init__(self, username, password):
+    def __init__(self, repo, username, password):
+        self.urls = { 'issues': 'https://github.com/{}/issues'.format(repo)
+                    , 'api': 'https://api.github.com/repos/{}/issues'.format(repo)
+                    , 'label': 'https://github.com/{}/labels/Radar'.format(repo)
+                     }
         self.session = requests.Session()
         self.session.auth = (username, password)
 
@@ -35,22 +36,22 @@ class Radar(object):
     def hit_api(self, method, path_info='', params=None, json=None):
         assert method in ('get', 'post', 'patch'), method
         call = getattr(self.session, method)
-        response = call(API_ISSUES + path_info, params=params, json=json)
+        response = call(self.urls['api'] + path_info, params=params, json=json)
         if response.status_code not in (200, 201):
             raise APIError(response.status_code, response.text)
-        return response
+        return response.json()
 
 
     def find_current_tickets(self):
-        return self.hit_api('get', params={'labels': 'Radar'}).json()
+        return self.hit_api('get', params={'labels': 'Radar'})
 
     def create_ticket(self, title, body, labels):
-        print("creating {}".format(title))
-        return self.hit_api('post', json={'title': title, 'body': body, 'labels': 'labels'})
+        ticket = self.hit_api('post', json={'title': title, 'body': body, 'labels': labels})
+        print("created {}".format(ticket['html_url']))
 
     def close_ticket(self, number):
-        print("closing {}/{}".format(HTML_ISSUES, number))
-        return self.hit_api('patch', '/{}'.format(number), json={'state': 'closed'})
+        ticket = self.hit_api('patch', '/{}'.format(number), json={'state': 'closed'})
+        print("closed {}".format(ticket['html_url']))
 
 
     def rotate(self, ticket):
@@ -63,11 +64,11 @@ class Radar(object):
         prev_ticket_number = ticket['number']
         assert type(prev_ticket_number) is int, prev_ticket_number
 
-        prev_link = "[last week]({}/{})"
-        prev_link = prev_link.format(prev_radar_number, HTML_ISSUES, prev_ticket_number)
+        prev_link = "[&larr; Previous Radar Sweep]({}/{})\n\n------\n\n"
+        prev_link = prev_link.format(self.urls['issues'], prev_ticket_number)
 
         next_title = "{} {}".format(title_base, prev_radar_number + 1)
-        next_body = [prev_link, ''] + ticket['body'].splitlines()[2:]
+        next_body = [prev_link, ''] + ticket['body'].splitlines()[4:]
         next_body = '\n'.join(next_body).strip()
         next_labels = [label['name'] for label in ticket['labels']]
 
@@ -75,17 +76,25 @@ class Radar(object):
         self.close_ticket(prev_ticket_number)
 
 
-def main(username, password):
-    radar = Radar(username, password)
+    def open_in_browser(self):
+        url = self.urls['label']
+        print("opening {}".format(url))
+        webbrowser.open(url)
+
+
+def main(repo, username, password):
+    radar = Radar(repo, username, password)
     current_tickets = radar.find_current_tickets()
     for ticket in current_tickets:
         try:
             radar.rotate(ticket)
         except:
             traceback.print_exc()
+    radar.open_in_browser()
 
 
 if __name__ == '__main__':
+    repo = os.environ['GITHUB_REPO']
     username = os.environ['GITHUB_USERNAME']
     password = os.environ['GITHUB_PASSWORD']
-    main(username, password)
+    main(repo, username, password)
