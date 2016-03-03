@@ -19,7 +19,7 @@ class Paydays(botlib.Issues):
         prev_ticket_number = previous['number']
         assert type(prev_ticket_number) is int, prev_ticket_number
 
-        prev_link = '[&larr; Payday {}]({}/{})'
+        prev_link = '[&larr; Payday {}]({}/{})\n\n------\n\n'
         prev_link = prev_link.format(prev_payday_number, self.urls['html'], previous['number'])
 
         n = int(prev_title.split()[-1])
