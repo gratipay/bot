@@ -1,3 +1,6 @@
+# Suppress attempts to mail output. We'll check syslog.
+MAILTO=""
+
 # Rotate the Radar every Sunday.
 0    5    *    *    0    /root/bot/env/bin/python rotate-radar.py | logger -t ROTATE-RADAR
  
