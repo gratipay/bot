@@ -1,11 +1,11 @@
 # Rotate the Radar every Sunday.
-0    5    *    *    0    /root/bot/env/bin/python rotate-radar.py | logger -t bot
+0    5    *    *    0    /root/bot/env/bin/python rotate-radar.py | logger -t ROTATE-RADAR
  
 # Kick off Payday every Thursday.
-0    5    *    *    4    /root/bot/env/bin/python kick-off-payday.py | logger -t bot
+0    5    *    *    4    /root/bot/env/bin/python kick-off-payday.py | logger -t KICK-OFF-PAYDAY
  
 # Poll for updates every minute.
-*    *    *    *    *    /root/bot/update.sh | logger -t bot
+*    *    *    *    *    /root/bot/update.sh | logger -t UPDATE-BOT
 
 #    ┬    ┬    ┬    ┬
 #    │    │    │    │
