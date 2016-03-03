@@ -14,11 +14,13 @@ class Paydays(botlib.Issues):
         prev_title = previous['title']
         assert re.match(r"run Gratipay [0-9]+", prev_title), prev_title
 
+        prev_payday_number = prev_title.split()[-1]
+
         prev_ticket_number = previous['number']
         assert type(prev_ticket_number) is int, prev_ticket_number
 
-        prev_link = '[&larr; {}]({}/{})'
-        prev_link = prev_link.format(prev_title, self.urls['html'], previous['number'])
+        prev_link = '[&larr; Payday {}]({}/{})'
+        prev_link = prev_link.format(prev_payday_number, self.urls['html'], previous['number'])
 
         n = int(prev_title.split()[-1])
         next_title = 'run Gratipay {}'.format(n + 1)
