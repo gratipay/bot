@@ -29,7 +29,7 @@ class Radar(botlib.Issues):
         assert type(prev_ticket_number) is int, prev_ticket_number
 
         prev_link = "[&larr; {}]({}/{})\n\n------\n\n"
-        prev_link = prev_link.format(prev_title, self.urls['issues'], prev_ticket_number)
+        prev_link = prev_link.format(prev_title, self.urls['html'], prev_ticket_number)
 
         title_base, prev_radar_number = prev_title.rsplit(None, 1)
         prev_radar_number = int(prev_radar_number)

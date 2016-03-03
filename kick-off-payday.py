@@ -21,7 +21,7 @@ class Paydays(botlib.Issues):
         assert type(prev_ticket_number) is int, prev_ticket_number
 
         prev_link = '[&larr; {}]({}/{})'
-        prev_link = prev_link.format(prev_title, self.urls['issues'], previous['number'])
+        prev_link = prev_link.format(prev_title, self.urls['html'], previous['number'])
 
         pilot, copilot, third = self.get_crew()
 

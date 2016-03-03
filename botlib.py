@@ -22,7 +22,7 @@ class APIError(Exception):
 class Issues(object):
 
     def __init__(self, repo, username, password):
-        self.urls = { 'issues': 'https://github.com/{}/issues'.format(repo)
+        self.urls = { 'html': 'https://github.com/{}/issues'.format(repo)
                     , 'api': 'https://api.github.com/repos/{}/issues'.format(repo)
                      }
         self.session = requests.Session()
