@@ -51,6 +51,7 @@ def main(repo, username, password):
         try:
             radar.rotate(ticket)
         except:
+            print(ticket)
             traceback.print_exc()
 
 
