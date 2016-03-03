@@ -2,10 +2,6 @@
 MAILTO=""
 PYTHON=/root/bot/env/bin/python
 
-# Test the Radar and Payday.
-*/5    *    *    *    *    $PYTHON /root/bot/rotate-radar.py 2>&1 | logger -t ROTATE-RADAR
-*/5    *    *    *    *    $PYTHON /root/bot/kick-off-payday.py 2>&1 | logger -t KICK-OFF-PAYDAY
-
 # Rotate the Radar every Sunday.
 0    5    *    *    0    $PYTHON /root/bot/rotate-radar.py 2>&1 | logger -t ROTATE-RADAR
  
