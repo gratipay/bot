@@ -2,7 +2,6 @@
 import re
 import os
 import traceback
-import webbrowser
 
 import requests
 
@@ -27,7 +26,6 @@ class Radar(object):
     def __init__(self, repo, username, password):
         self.urls = { 'issues': 'https://github.com/{}/issues'.format(repo)
                     , 'api': 'https://api.github.com/repos/{}/issues'.format(repo)
-                    , 'label': 'https://github.com/{}/labels/Radar'.format(repo)
                      }
         self.session = requests.Session()
         self.session.auth = (username, password)
@@ -76,12 +74,6 @@ class Radar(object):
         self.close_ticket(prev_ticket_number)
 
 
-    def open_in_browser(self):
-        url = self.urls['label']
-        print("opening {}".format(url))
-        webbrowser.open(url)
-
-
 def main(repo, username, password):
     radar = Radar(repo, username, password)
     current_tickets = radar.find_current_tickets()
@@ -90,7 +82,6 @@ def main(repo, username, password):
             radar.rotate(ticket)
         except:
             traceback.print_exc()
-    radar.open_in_browser()
 
 
 if __name__ == '__main__':
