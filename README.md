@@ -13,10 +13,9 @@ dpkg-reconfigure unattended-upgrades
 
 apt-get install git
 git clone https://github.com/gratipay/bot.git
+cd bot
 
 apt-get install python3.4-venv
-
-cd bot
 python3 -m venv env
 env/bin/pip install --upgrade pip
 
