@@ -10,9 +10,6 @@ class Paydays(botlib.Issues):
     def find_previous(self):
         return self.hit_api('get', params={'state': 'all', 'labels': 'Payday'})[0]
 
-    def get_crew(self):
-        return ('whit537', 'clone1018', 'rohitpaulk')
-
     def create_next(self, previous):
         prev_title = previous['title']
         assert re.match(r"Payday [0-9]+", prev_title), prev_title
@@ -23,12 +20,10 @@ class Paydays(botlib.Issues):
         prev_link = '[&larr; {}]({}/{})'
         prev_link = prev_link.format(prev_title, self.urls['html'], previous['number'])
 
-        pilot, copilot, third = self.get_crew()
-
         n = int(prev_title.split()[-1])
         next_title = 'Payday {}'.format(n + 1)
-        next_body = '{}\n\n-------\n\nThis month: {} ({})\n\nNext month: {} ({})'
-        next_body = next_body.format(prev_link, pilot, copilot, copilot, third)
+        next_body = [prev_link, ''] + previous['body'].splitlines()[4:]
+        next_body = '\n'.join(next_body).strip()
 
         payload = {'title': next_title, 'body': next_body, 'labels': ['Payday']}
         ticket = self.hit_api('post', json=payload)
