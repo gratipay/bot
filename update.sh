@@ -13,7 +13,7 @@ BASE=$(git merge-base @ @{u})
 if [ $LOCAL = $REMOTE ]; then
     exit 0
 elif [ $LOCAL = $BASE ]; then
-    echo "Updating ..."
+    echo "Here we go!"
 elif [ $REMOTE = $BASE ]; then
     echo "WTF? Need to push."
     exit 1
