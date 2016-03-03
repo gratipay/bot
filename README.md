@@ -22,18 +22,16 @@ week.
 Here's how we install Gratipay Bot on a fresh Ubuntu 14.04 server at Digital Ocean:
 
 ```bash
-yes | apt-get install unattended-upgrades
+apt-get update
+
+apt-get install unattended-upgrades
 dpkg-reconfigure unattended-upgrades
-```
 
-Choose "yes" at the interactive prompt.
-
-```bash
-yes | apt-get install git
+apt-get install git
 git clone https://github.com/gratipay/bot.git
 cd bot
 
-yes | apt-get install python3.4-venv
+apt-get install python3.4-venv
 python3 -m venv env
 env/bin/pip install --upgrade pip
 
