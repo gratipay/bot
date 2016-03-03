@@ -3,6 +3,8 @@ set -e
 
 cd /root/bot
 
+git fetch
+
 # http://stackoverflow.com/a/3278427
 LOCAL=$(git rev-parse @)
 REMOTE=$(git rev-parse @{u})
