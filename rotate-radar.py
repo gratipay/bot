@@ -1,44 +1,13 @@
 #!/usr/bin/env python3
+import os, sys; sys.path.insert(0, os.path.dirname(__file__))
+
 import re
-import os
 import traceback
 
-import requests
+import botlib
 
 
-class APIError(Exception):
-
-    def __init__(self, code, body):
-        Exception.__init__(self)
-        self.code = code
-        self.reason = body.splitlines() and body.splitlines()[-1] or ''
-        self.body = body
-
-    def __str__(self):
-        return repr(self)
-
-    def __repr__(self):
-        return '<APIError {}: {}>'.format(self.code, self.reason)
-
-
-class Radar(object):
-
-    def __init__(self, repo, username, password):
-        self.urls = { 'issues': 'https://github.com/{}/issues'.format(repo)
-                    , 'api': 'https://api.github.com/repos/{}/issues'.format(repo)
-                     }
-        self.session = requests.Session()
-        self.session.auth = (username, password)
-
-
-    def hit_api(self, method, path_info='', params=None, json=None):
-        assert method in ('get', 'post', 'patch'), method
-        call = getattr(self.session, method)
-        response = call(self.urls['api'] + path_info, params=params, json=json)
-        if response.status_code not in (200, 201):
-            raise APIError(response.status_code, response.text)
-        return response.json()
-
+class Radar(botlib.Issues):
 
     def find_current_tickets(self):
         return self.hit_api('get', params={'labels': 'Radar'})
@@ -52,28 +21,29 @@ class Radar(object):
         print("closed {}".format(ticket['html_url']))
 
 
-    def rotate(self, ticket):
-        prev_title = ticket['title']
+    def rotate(self, previous):
+        prev_title = previous['title']
         assert re.match(r"[A-Za-z ]*Radar [0-9]+", prev_title), prev_title
+
+        prev_ticket_number = previous['number']
+        assert type(prev_ticket_number) is int, prev_ticket_number
+
+        prev_link = "[&larr; {}]({}/{})\n\n------\n\n"
+        prev_link = prev_link.format(prev_title, self.urls['issues'], prev_ticket_number)
 
         title_base, prev_radar_number = prev_title.rsplit(None, 1)
         prev_radar_number = int(prev_radar_number)
 
-        prev_ticket_number = ticket['number']
-        assert type(prev_ticket_number) is int, prev_ticket_number
-
-        prev_link = "[&larr; Previous Radar Sweep]({}/{})\n\n------\n\n"
-        prev_link = prev_link.format(self.urls['issues'], prev_ticket_number)
-
         next_title = "{} {}".format(title_base, prev_radar_number + 1)
-        next_body = [prev_link, ''] + ticket['body'].splitlines()[4:]
+        next_body = [prev_link, ''] + previous['body'].splitlines()[4:]
         next_body = '\n'.join(next_body).strip()
-        next_labels = [label['name'] for label in ticket['labels']]
+        next_labels = [label['name'] for label in previous['labels']]
 
         self.create_ticket(next_title, next_body, next_labels)
         self.close_ticket(prev_ticket_number)
 
 
+@botlib.main
 def main(repo, username, password):
     radar = Radar(repo, username, password)
     current_tickets = radar.find_current_tickets()
@@ -85,7 +55,4 @@ def main(repo, username, password):
 
 
 if __name__ == '__main__':
-    repo = os.environ['GITHUB_REPO']
-    username = os.environ['GITHUB_USERNAME']
-    password = os.environ['GITHUB_PASSWORD']
-    main(repo, username, password)
+    main()
