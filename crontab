@@ -6,7 +6,7 @@ PYTHON=/root/bot/env/bin/python
 0    5    *    *    0    $PYTHON /root/bot/rotate-radar.py 2>&1 | logger -t ROTATE-RADAR
  
 # Kick off Payday every Thursday.
-0    5    *    *    4    $PYTHON /root/bot/kick-off-payday.py 2>&1 | logger -t KICK-OFF-PAYDAY
+45   13   *    *    4    $PYTHON /root/bot/kick-off-payday.py 2>&1 | logger -t KICK-OFF-PAYDAY
  
 # Poll for updates every minute.
 *    *    *    *    *    /root/bot/update-if-needed.sh 2>&1 | logger -t UPDATE-BOT
