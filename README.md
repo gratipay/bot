@@ -22,21 +22,25 @@ week.
 Here's how we install Gratipay Bot on a fresh Ubuntu 14.04 server at Digital Ocean:
 
 ```bash
-apt-get install unattended-upgrades
+yes | apt-get install unattended-upgrades
 dpkg-reconfigure unattended-upgrades
+```
 
-apt-get install git
+Choose "yes" at the interactive prompt.
+
+```bash
+yes | apt-get install git
 git clone https://github.com/gratipay/bot.git
 cd bot
 
-apt-get install python3.4-venv
+yes | apt-get install python3.4-venv
 python3 -m venv env
 env/bin/pip install --upgrade pip
 
 ./update.sh
 ```
 
-Gratipay Bot's configuration lives in `/etc/environment`:
+Configuration lives in `/etc/environment`:
 
 ```
 GITHUB_REPO=gratipay/inside.gratipay.com
@@ -44,5 +48,5 @@ GITHUB_USERNAME=gratipay-bot
 GITHUB_PASSWORD=deadbeef-a-personal-security-token
 ```
 
-Note that Gratipay Bot also kicks off team review tickets from inside the [web
+Note that Gratipay Bot kicks off team review tickets from inside the [web
 app](/gratipay/gratipay.com).
