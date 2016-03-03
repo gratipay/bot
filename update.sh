@@ -9,7 +9,6 @@ REMOTE=$(git rev-parse @{u})
 BASE=$(git merge-base @ @{u})
 
 if [ $LOCAL = $REMOTE ]; then
-    echo "Up-to-date"
     exit 0
 elif [ $LOCAL = $BASE ]; then
     echo "Updating ..."
