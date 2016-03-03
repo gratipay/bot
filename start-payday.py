@@ -8,7 +8,7 @@ import botlib
 class Paydays(botlib.Issues):
 
     def find_previous(self):
-        return self.hit_api('get', params={'labels': 'Payday'})[0]
+        return self.hit_api('get', params={'state': 'all', 'labels': 'Payday'})[0]
 
     def get_crew(self):
         return ('@whit537', '@clone1018', '@rohitpaulk')
