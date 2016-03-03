@@ -12,7 +12,7 @@ class Paydays(botlib.Issues):
 
     def create_next(self, previous):
         prev_title = previous['title']
-        assert re.match(r"Payday [0-9]+", prev_title), prev_title
+        assert re.match(r"run Gratipay [0-9]+", prev_title), prev_title
 
         prev_ticket_number = previous['number']
         assert type(prev_ticket_number) is int, prev_ticket_number
@@ -21,7 +21,7 @@ class Paydays(botlib.Issues):
         prev_link = prev_link.format(prev_title, self.urls['html'], previous['number'])
 
         n = int(prev_title.split()[-1])
-        next_title = 'Payday {}'.format(n + 1)
+        next_title = 'run Gratipay {}'.format(n + 1)
         next_body = [prev_link, ''] + previous['body'].splitlines()[4:]
         next_body = '\n'.join(next_body).strip()
 
