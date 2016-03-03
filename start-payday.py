@@ -23,12 +23,12 @@ class Paydays(botlib.Issues):
         prev_link = '[&larr; {}]({}/{})'
         prev_link = prev_link.format(prev_title, self.urls['issues'], previous['number'])
 
-        pilot, copilot, first_mate = self.get_crew()
+        pilot, copilot, third = self.get_crew()
 
         n = int(prev_title.split()[-1])
         next_title = 'Payday {}'.format(n + 1)
         next_body = '{}\n\n-------\n\nThis month: {} ({})\n\nNext month: {} ({})'
-        next_body = next_body.format(prev_link, pilot, copilot, copilot, first_mate)
+        next_body = next_body.format(prev_link, pilot, copilot, copilot, third)
 
         payload = {'title': next_title, 'body': next_body, 'labels': ['Payday']}
         ticket = self.hit_api('post', json=payload)
