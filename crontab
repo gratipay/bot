@@ -1,0 +1,16 @@
+# Rotate the Radar every Sunday.
+0    5    *    *    0    /root/bot/env/bin/python rotate-radar.py
+ 
+# Kick off Payday every Thursday.
+0    5    *    *    4    /root/bot/env/bin/python kick-off-payday.py
+ 
+# Poll for updates every minute.
+*    *    *    *    *    /root/bot/update.sh
+
+#    ┬    ┬    ┬    ┬
+#    │    │    │    │
+#    │    │    │    └─ day of week (0 - 6) (0 is Sunday, or use names)
+#    │    │    └─────── month (1 - 12)
+#    │    └───────────── day of month (1 - 31)
+#    └─────────────────── hour (0 - 23)
+#───────────────────────── min (0 - 59)
