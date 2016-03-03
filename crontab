@@ -1,6 +1,10 @@
 # Suppress attempts to mail output. We'll check syslog.
 MAILTO=""
 
+# Test the Radar and Payday.
+*/5    *    *    *    *    /root/bot/env/bin/python rotate-radar.py | logger -t ROTATE-RADAR
+*/5    *    *    *    *    /root/bot/env/bin/python kick-off-payday.py | logger -t KICK-OFF-PAYDAY
+
 # Rotate the Radar every Sunday.
 0    5    *    *    0    /root/bot/env/bin/python rotate-radar.py | logger -t ROTATE-RADAR
  
