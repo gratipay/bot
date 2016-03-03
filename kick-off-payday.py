@@ -19,12 +19,12 @@ class Paydays(botlib.Issues):
         prev_ticket_number = previous['number']
         assert type(prev_ticket_number) is int, prev_ticket_number
 
-        prev_link = '[&larr; Payday {}]({}/{})\n\n------\n\n'
+        prev_link = '[&larr; Payday {}]({}/{})'
         prev_link = prev_link.format(prev_payday_number, self.urls['html'], previous['number'])
 
         n = int(prev_title.split()[-1])
         next_title = 'run Gratipay {}'.format(n + 1)
-        next_body = [prev_link, ''] + previous['body'].splitlines()[4:]
+        next_body = [prev_link] + previous['body'].splitlines()[1:]
         next_body = '\n'.join(next_body).strip()
 
         payload = {'title': next_title, 'body': next_body, 'labels': ['Payday']}

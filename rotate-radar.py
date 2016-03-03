@@ -28,14 +28,14 @@ class Radar(botlib.Issues):
         prev_ticket_number = previous['number']
         assert type(prev_ticket_number) is int, prev_ticket_number
 
-        prev_link = "[&larr; {}]({}/{})\n\n------\n\n"
+        prev_link = "[&larr; {}]({}/{})"
         prev_link = prev_link.format(prev_title, self.urls['html'], prev_ticket_number)
 
         title_base, prev_radar_number = prev_title.rsplit(None, 1)
         prev_radar_number = int(prev_radar_number)
 
         next_title = "{} {}".format(title_base, prev_radar_number + 1)
-        next_body = [prev_link, ''] + previous['body'].splitlines()[4:]
+        next_body = [prev_link] + previous['body'].splitlines()[1:]
         next_body = '\n'.join(next_body).strip()
         next_labels = [label['name'] for label in previous['labels']]
 
