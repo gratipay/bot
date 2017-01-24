@@ -5,12 +5,8 @@ This repo holds the source code for [**@gratipay-bot**](https://github/gratipay-
 
 ## What does Gratipay Bot do?
 
-Gratipay Bot kicks off new [Team
-review](http://inside.gratipay.com/howto/review-teams) tickets.
-
-Gratipay Bot rotates all weekly
-[Radar](http://inside.gratipay.com/howto/sweep-the-radar) tickets, closing old
-ones and making new ones, copying the ticket description from old to new.
+Gratipay Bot kicks off new [project
+review](http://inside.gratipay.com/howto/review-projects) tickets.
 
 Gratipay Bot kicks off [payday](http://inside.gratipay.com/howto/run-payday)
 each Thursday with a new ticket, copying the description from the previous
