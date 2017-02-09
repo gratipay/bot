@@ -8,7 +8,7 @@ import botlib
 class Paydays(botlib.Issues):
 
     def find_previous(self):
-        return self.hit_api('get', params={'state': 'all', 'labels': 'Payday'})[0]
+        return self.hit_api('get', params={'state': 'all', 'labels': 'bot/Payday'})[0]
 
     def create_next(self, previous):
         prev_title = previous['title']
