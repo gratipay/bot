@@ -5,10 +5,13 @@ import re
 import botlib
 
 
+LABEL = 'bot/Payday'
+
+
 class Paydays(botlib.Issues):
 
     def find_previous(self):
-        return self.hit_api('get', params={'state': 'all', 'labels': 'bot/Payday'})[0]
+        return self.hit_api('get', params={'state': 'all', 'labels': LABEL})[0]
 
     def create_next(self, previous):
         prev_title = previous['title']
@@ -27,7 +30,7 @@ class Paydays(botlib.Issues):
         next_body = [prev_link] + previous['body'].splitlines()[1:]
         next_body = '\n'.join(next_body).strip()
 
-        payload = {'title': next_title, 'body': next_body, 'labels': ['Payday']}
+        payload = {'title': next_title, 'body': next_body, 'labels': [LABEL]}
         ticket = self.hit_api('post', json=payload)
         print("created {}".format(ticket['html_url']))
 
