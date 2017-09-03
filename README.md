@@ -43,4 +43,4 @@ GITHUB_PASSWORD=deadbeef-a-personal-security-token
 ```
 
 Note that Gratipay Bot kicks off team review tickets from inside the [web
-app](/gratipay/gratipay.com).
+app](https://github.com/gratipay/gratipay.com).
